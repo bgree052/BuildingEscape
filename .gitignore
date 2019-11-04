@@ -74,8 +74,4 @@ Plugins/*/Intermediate/*
 DerivedDataCache/*
 
 # Don't need the Unreal Starter Content
-<<<<<<< Updated upstream
 Content/StarterContent/
-=======
-Content/StarterContent/
->>>>>>> Stashed changes
