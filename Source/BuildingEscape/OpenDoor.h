@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "GameFramework/Actor.h"
 #include "Engine.h"
+#include "Engine/TriggerVolume.h"
 
 #include "OpenDoor.generated.h"
 
@@ -25,4 +26,16 @@ protected:
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
+private:
+	void OpenDoor();
+
+	UPROPERTY(VisibleAnywhere)
+	float OpenAngle = -90.f;
+
+	UPROPERTY(EditAnywhere)
+	ATriggerVolume *PressurePlate;
+
+	UPROPERTY(VisibleAnywhere)
+	AActor *ActorThatOpens; //Remember pawn inherits from the actor
 };
