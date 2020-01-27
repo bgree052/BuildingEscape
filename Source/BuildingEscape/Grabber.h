@@ -8,6 +8,8 @@
 #include "CollisionQueryParams.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Components/InputComponent.h"
+#include "Engine/World.h"
+#include "GameFramework/PlayerController.h"
 
 #include "Grabber.generated.h"
 
@@ -50,6 +52,12 @@ private:
 
 	// Return hit for first physics body in reach
 	const FHitResult GetFirstPhysicsBodyInReach();
+
+	// Return the start point of the player's reach
+	FVector GetReachLineStart();
+
+	// Return the end point of the player's reach
+	FVector GetReachLineEnd();
 
 	// Draws a debug line to show the reach of the player in game
 	void DrawGrabDebugLine();
