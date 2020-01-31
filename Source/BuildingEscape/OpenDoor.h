@@ -32,7 +32,7 @@ private:
 	void CloseDoor();
 
 	UPROPERTY(EditAnywhere)
-	float OpenAngle = -90.f;
+	float OpenAngle = 90.f;
 
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume *PressurePlate;
