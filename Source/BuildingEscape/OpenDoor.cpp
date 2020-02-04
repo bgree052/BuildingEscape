@@ -45,6 +45,8 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	{
 		OnClose.Broadcast();
 	}
+
+	//UE_LOG(LogTemp, Warning, TEXT("%f"), GetTotalMassOfActorsOnPlate());
 }
 
 float UOpenDoor::GetTotalMassOfActorsOnPlate()
