@@ -23,7 +23,7 @@ void UOpenDoor::BeginPlay()
 	//Find the owning Actor
 	Owner = GetOwner();
 
-	if (PressurePlate == nullptr)
+	if (PressurePlatePurple == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s missing Pressure Plate"), *GetOwner()->GetName());
 	}
@@ -35,15 +35,31 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Poll the trigger volume
-	if (GetTotalMassOfActorsOnPlate() > TriggerMass)
+	if (RoomNumber == 1)
 	{
-		OnOpen.Broadcast();
-	}
+		if (GetTotalMassOfActorsOnPlate() > TriggerMass)
+		{
+			OnOpen.Broadcast();
+		}
 
-	// Check if it's time to close the door
-	else
+		// Check if it's time to close the door
+		else
+		{
+			OnClose.Broadcast();
+		}
+	}
+	if (RoomNumber == 2)
 	{
-		OnClose.Broadcast();
+		if (CheckBothPlatesAreCovered() == true)
+		{
+			OnOpen.Broadcast();
+		}
+
+		// Check if it's time to close the door
+		else
+		{
+			OnClose.Broadcast();
+		}
 	}
 
 	//UE_LOG(LogTemp, Warning, TEXT("%f"), GetTotalMassOfActorsOnPlate());
@@ -55,18 +71,66 @@ float UOpenDoor::GetTotalMassOfActorsOnPlate()
 
 	// find all overlapping actors
 	TArray<AActor *> OverlappingActors;
-	if (PressurePlate == nullptr)
+	if (PressurePlatePurple == nullptr)
 	{
 		return TotalMass;
 	}
-	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
+	PressurePlatePurple->GetOverlappingActors(OUT OverlappingActors);
 
 	// iterate through them adding their masses
 	for (const auto *Actor : OverlappingActors)
 	{
 		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
-		UE_LOG(LogTemp, Warning, TEXT("%s on pressure plate"), *Actor->GetName());
+		//UE_LOG(LogTemp, Warning, TEXT("%s on pressure plate"), *Actor->GetName());
 	}
 
 	return TotalMass;
+}
+
+bool UOpenDoor::CheckBothPlatesAreCovered()
+{
+	// find all overlapping actors
+	TArray<AActor *> OverlappingActorsPurple;
+	TArray<AActor *> OverlappingActorsGreen;
+	bool PurpleOnPurple = false;
+	bool GreenOnGreen = false;
+	if (PressurePlatePurple == nullptr || PressurePlateGreen == nullptr || PurpleTable == nullptr || GreenChair == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s has a nullptr"), *GetOwner()->GetName());
+		return false;
+	}
+	PressurePlatePurple->GetOverlappingActors(OUT OverlappingActorsPurple);
+	PressurePlateGreen->GetOverlappingActors(OUT OverlappingActorsGreen);
+	for (const auto *Actor : OverlappingActorsPurple)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s on pressure plate"), *Actor->GetName());
+		if (Actor->GetName() == PurpleTable->GetName() || Actor->GetName() == "DefaultPawn_BP_C_0")
+		{
+			PurpleOnPurple = true;
+			UE_LOG(LogTemp, Warning, TEXT("Purple true"));
+		}
+		else
+		{
+			PurpleOnPurple = false;
+		}
+	}
+	for (const auto *Actor : OverlappingActorsGreen)
+	{
+		if (Actor->GetName() == GreenChair->GetName() || Actor->GetName() == "DefaultPawn_BP_C_0")
+		{
+			GreenOnGreen = true;
+		}
+		else
+		{
+			GreenOnGreen = false;
+		}
+	}
+	if (GreenOnGreen == true && PurpleOnPurple == true)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

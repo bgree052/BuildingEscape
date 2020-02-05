@@ -39,13 +39,26 @@ private:
 	void CloseDoor();
 
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume *PressurePlate = nullptr;
+	ATriggerVolume *PressurePlatePurple = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	ATriggerVolume *PressurePlateGreen = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	AActor *GreenChair = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	AActor *PurpleTable = nullptr;
 
 	UPROPERTY(EditAnywhere)
 	float TriggerMass;
+
+	UPROPERTY(EditAnywhere)
+	int RoomNumber;
 
 	//The Owning Door
 	AActor *Owner = nullptr;
 
 	float GetTotalMassOfActorsOnPlate();
+	bool CheckBothPlatesAreCovered();
 };
