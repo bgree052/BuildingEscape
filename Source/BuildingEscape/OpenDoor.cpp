@@ -61,6 +61,25 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 			OnClose.Broadcast();
 		}
 	}
+	if (RoomNumber == 3)
+	{
+		if (GetTotalMassOfActorsOnPlate() > TriggerMass)
+		{
+			OnOpen2.Broadcast();
+		}
+		else
+		{
+			OnClose2.Broadcast();
+		}
+		if (CheckCorrectObjectOnPlate(GreenChair) && GetTotalMassOfActorsOnPlate() > TriggerMass)
+		{
+			OnOpen.Broadcast();
+		}
+		else
+		{
+			OnClose.Broadcast();
+		}
+	}
 
 	//UE_LOG(LogTemp, Warning, TEXT("%f"), GetTotalMassOfActorsOnPlate());
 }
@@ -133,4 +152,23 @@ bool UOpenDoor::CheckBothPlatesAreCovered()
 	{
 		return false;
 	}
+}
+
+bool UOpenDoor::CheckCorrectObjectOnPlate(AActor *DesiredObject)
+{
+	if (PressurePlatePurple == nullptr || PressurePlateGreen == nullptr || PurpleTable == nullptr || GreenChair == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s has a nullptr"), *GetOwner()->GetName());
+		return false;
+	}
+	TArray<AActor *> OverlappingActorsGreen;
+	PressurePlateGreen->GetOverlappingActors(OUT OverlappingActorsGreen);
+	for (const auto *Actor : OverlappingActorsGreen)
+	{
+		if (Actor->GetName() == DesiredObject->GetName())
+		{
+			return true;
+		}
+	}
+	return false;
 }

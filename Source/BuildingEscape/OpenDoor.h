@@ -35,6 +35,12 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FDoorEvent OnClose;
 
+	UPROPERTY(BlueprintAssignable)
+	FDoorEvent OnOpen2;
+
+	UPROPERTY(BlueprintAssignable)
+	FDoorEvent OnClose2;
+
 private:
 	void CloseDoor();
 
@@ -61,4 +67,5 @@ private:
 
 	float GetTotalMassOfActorsOnPlate();
 	bool CheckBothPlatesAreCovered();
+	bool CheckCorrectObjectOnPlate(AActor *DesiredObject);
 };
